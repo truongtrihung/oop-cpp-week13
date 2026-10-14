@@ -5,204 +5,210 @@
 
 using namespace std;
 
-// 1. Class Employee (lớp cha)
+// 1. Lớp cơ sở Employee (Quản lý thông tin định danh nhân sự)
 class Employee {
 protected:
-    string cccd;
-    string sdt;
-    string address;
+    string identificationCard; // Thay tên biến: cccd -> identificationCard
+    string phoneNum;           // Thay tên biến: sdt -> phoneNum
+    string residence;          // Thay tên biến: address -> residence
 public:
     Employee() {
-        cccd = "";
-        sdt = "";
-        address = "";
+        identificationCard = "";
+        phoneNum = "";
+        residence = "";
     }
-    Employee(string c, string s, string a) {
-        cccd = c;
-        sdt = s;
-        address = a;
+    
+    Employee(string idCard, string phone, string addr) {
+        identificationCard = idCard;
+        phoneNum = phone;
+        residence = addr;
     }
 
-    virtual ~Employee() {} // Destructor ảo để hủy đúng đối tượng dẫn xuất
+    virtual ~Employee() {} 
 
     virtual void displayInfo() const {
-        cout << "CCCD    : " << cccd << endl;
-        cout << "SDT     : " << sdt << endl;
-        cout << "Address : " << address << endl;
+        cout << "CCCD    : " << identificationCard << endl;
+        cout << "SDT     : " << phoneNum << endl;
+        cout << "Address : " << residence << endl;
     }
 
-    // Hàm thuần ảo hoặc ảo để tính lương cho các lớp con
     virtual double tinhLuong() const = 0; 
 
-    // getters & setters
-    string getCCCD() const { return cccd; }
-    string getSDT() const { return sdt; }
-    string getAddress() const { return address; }
-    void setCCCD(string c) { cccd = c; }
-    void setSDT(string s) { sdt = s; }
-    void setAddress(string a) { address = a; }
+    // Getters & Setters tùy chỉnh phong cách đặt tên
+    string getCCCD() const { return identificationCard; }
+    string getSDT() const { return phoneNum; }
+    string getAddress() const { return residence; }
+    
+    void setCCCD(string idCard) { identificationCard = idCard; }
+    void setSDT(string phone) { phoneNum = phone; }
+    void setAddress(string addr) { residence = addr; }
 };
 
-// 2. Class HourlyEmployee (kế thừa từ Employee)
+// 2. Lớp HourlyEmployee (Nhân viên tính lương theo giờ làm việc)
 class HourlyEmployee : public Employee {
 private:
-    int soGioLamViec;
-    double donGia;
+    int workHours;     // Thay tên biến: soGioLamViec -> workHours
+    double hourlyRate; // Thay tên biến: donGia -> hourlyRate
 public:
     HourlyEmployee() : Employee() {
-        soGioLamViec = 0;
-        donGia = 0.0;
+        workHours = 0;
+        hourlyRate = 0.0;
     }
-    HourlyEmployee(string c, string s, string a, int soGio, double dg) : Employee(c, s, a) {
-        soGioLamViec = soGio;
-        donGia = dg;
+    
+    HourlyEmployee(string idCard, string phone, string addr, int hours, double rate) 
+        : Employee(idCard, phone, addr) {
+        workHours = hours;
+        hourlyRate = rate;
     }
 
     double tinhLuong() const override {
-        return soGioLamViec * donGia;
+        return workHours * hourlyRate;
     }
 
     void displayInfo() const override {
         cout << "--- Nhan vien theo gio ---" << endl;
         Employee::displayInfo();
-        cout << "So gio lam viec: " << soGioLamViec << endl;
-        cout << "Don gia         : " << donGia << endl;
+        cout << "So gio lam viec: " << workHours << endl;
+        cout << "Don gia         : " << hourlyRate << endl;
         cout << "Luong           : " << tinhLuong() << endl;
     }
 
-    int getSoGioLamViec() const { return soGioLamViec; }
-    double getDonGia() const { return donGia; }
-    void setSoGioLamViec(int g) { soGioLamViec = g; }
-    void setDonGia(double dg) { donGia = dg; }
+    int getSoGioLamViec() const { return workHours; }
+    double getDonGia() const { return hourlyRate; }
+    
+    void setSoGioLamViec(int hours) { workHours = hours; }
+    void setDonGia(double rate) { hourlyRate = rate; }
 };
 
-// 3. Class MonthlyEmployee (kế thừa từ Employee)
+// 3. Lớp MonthlyEmployee (Nhân viên biên chế hưởng lương tháng cố định)
 class MonthlyEmployee : public Employee {
 private:
-    double luongCoBan;
-    double phuCap;
-    double heSoThuong;
+    double baseSalary;  // Thay tên biến: luongCoBan -> baseSalary
+    double allowance;   // Thay tên biến: phuCap -> allowance
+    double bonusFactor; // Thay tên biến: heSoThuong -> bonusFactor
 public:
     MonthlyEmployee() : Employee() {
-        luongCoBan = 0.0;
-        phuCap = 0.0;
-        heSoThuong = 0.0;
+        baseSalary = 0.0;
+        allowance = 0.0;
+        bonusFactor = 0.0;
     }
-    MonthlyEmployee(string c, string s, string a, double lcb, double pc, double hs) : Employee(c, s, a) {
-        luongCoBan = lcb;
-        phuCap = pc;
-        heSoThuong = hs;
+    
+    MonthlyEmployee(string idCard, string phone, string addr, double base, double allow, double bonus) 
+        : Employee(idCard, phone, addr) {
+        baseSalary = base;
+        allowance = allow;
+        bonusFactor = bonus;
     }
 
     double tinhLuong() const override {
-        return luongCoBan + phuCap + (luongCoBan * heSoThuong);
+        return baseSalary + allowance + (baseSalary * bonusFactor);
     }
 
     void displayInfo() const override {
         cout << "--- Nhan vien theo thang ---" << endl;
         Employee::displayInfo();
-        cout << "Luong co ban    : " << luongCoBan << endl;
-        cout << "Phu cap         : " << phuCap << endl;
-        cout << "He so thuong    : " << heSoThuong << endl;
+        cout << "Luong co ban    : " << baseSalary << endl;
+        cout << "Phu cap         : " << allowance << endl;
+        cout << "He so thuong    : " << bonusFactor << endl;
         cout << "Luong           : " << tinhLuong() << endl;
     }
 
-    double getLuongCoBan() const { return luongCoBan; }
-    double getPhuCap() const { return phuCap; }
-    double getHeSoThuong() const { return heSoThuong; }
-    void setLuongCoBan(double lcb) { luongCoBan = lcb; }
-    void setPhuCap(double pc) { phuCap = pc; }
-    void setHeSoThuong(double hs) { heSoThuong = hs; }
+    double getLuongCoBan() const { return baseSalary; }
+    double getPhuCap() const { return allowance; }
+    double getHeSoThuong() const { return bonusFactor; }
+    
+    void setLuongCoBan(double base) { baseSalary = base; }
+    void setPhuCap(double allow) { allowance = allow; }
+    void setHeSoThuong(double bonus) { bonusFactor = bonus; }
 };
 
 int main() {
-    // 3. Tạo ít nhất 2 đối tượng mỗi loại và lưu vào vector<Employee*> (Yêu cầu 3 & 4)
-    vector<Employee*> dsNhanVien;
-    dsNhanVien.push_back(new HourlyEmployee("07987654321", "0901111111", "Ha Noi", 160, 50000));
-    dsNhanVien.push_back(new HourlyEmployee("07987654322", "0902222222", "Hai Phong", 120, 60000));
-    dsNhanVien.push_back(new MonthlyEmployee("079987654321", "0903333333", "Da Nang", 15000000, 2000000, 1.2));
-    dsNhanVien.push_back(new MonthlyEmployee("079987654322", "0904444444", "Hue", 12000000, 1500000, 1.0));
+    // Khởi tạo danh sách quản lý sử dụng đa hình thông qua vector con trỏ
+    vector<Employee*> staffList;
+    staffList.push_back(new HourlyEmployee("07987654321", "0901111111", "Ha Noi", 160, 50000));
+    staffList.push_back(new HourlyEmployee("07987654322", "0902222222", "Hai Phong", 120, 60000));
+    staffList.push_back(new MonthlyEmployee("079987654321", "0903333333", "Da Nang", 15000000, 2000000, 1.2));
+    staffList.push_back(new MonthlyEmployee("079987654322", "0904444444", "Hue", 12000000, 1500000, 1.0));
 
-    // Hiển thị danh sách ban đầu
+    // Hiển thị toàn bộ danh sách nhân sự
     cout << "=== DANH SACH NHAN VIEN ===" << endl;
-    for (size_t i = 0; i < dsNhanVien.size(); ++i) {
-        dsNhanVien[i]->displayInfo();
+    for (size_t i = 0; i < staffList.size(); ++i) {
+        staffList[i]->displayInfo();
         cout << "--------------------------" << endl;
     }
 
-    // 4. Tính tổng quỹ lương (Yêu cầu 4)[cite: 5]
-    double tongQuyLuong = 0;
-    for (size_t i = 0; i < dsNhanVien.size(); ++i) {
-        tongQuyLuong += dsNhanVien[i]->tinhLuong();
+    // Tính tổng quỹ lương công ty
+    double totalPayroll = 0;
+    for (size_t i = 0; i < staffList.size(); ++i) {
+        totalPayroll += staffList[i]->tinhLuong();
     }
-    cout << "-> Tong quy luong cua cong ty: " << tongQuyLuong << endl << endl;
+    cout << "-> Tong quy luong cua cong ty: " << totalPayroll << endl << endl;
 
-    // 5. Tìm nhân viên có lương cao nhất và thấp nhất (Yêu cầu 5)[cite: 5]
-    if (!dsNhanVien.empty()) {
-        Employee* maxEmp = dsNhanVien[0];
-        Employee* minEmp = dsNhanVien[0];
-        for (size_t i = 1; i < dsNhanVien.size(); ++i) {
-            if (dsNhanVien[i]->tinhLuong() > maxEmp->tinhLuong()) {
-                maxEmp = dsNhanVien[i];
+    // Tìm kiếm nhân sự có mức thu nhập cao nhất và thấp nhất
+    if (!staffList.empty()) {
+        Employee* highestPaid = staffList[0];
+        Employee* lowestPaid = staffList[0];
+        for (size_t i = 1; i < staffList.size(); ++i) {
+            if (staffList[i]->tinhLuong() > highestPaid->tinhLuong()) {
+                highestPaid = staffList[i];
             }
-            if (dsNhanVien[i]->tinhLuong() < minEmp->tinhLuong()) {
-                minEmp = dsNhanVien[i];
+            if (staffList[i]->tinhLuong() < lowestPaid->tinhLuong()) {
+                lowestPaid = staffList[i];
             }
         }
         cout << "=== NHAN VIEN LUONG CAO NHAT ===" << endl;
-        maxEmp->displayInfo();
+        highestPaid->displayInfo();
         cout << "\n=== NHAN VIEN LUONG THAP NHAT ===" << endl;
-        minEmp->displayInfo();
+        lowestPaid->displayInfo();
         cout << endl;
     }
 
-    // 6. Đếm số lượng nhân viên từng loại (Yêu cầu 6)[cite: 5]
-    int countHourly = 0;
-    int countMonthly = 0;
-    for (size_t i = 0; i < dsNhanVien.size(); ++i) {
-        // Dùng dynamic_cast để kiểm tra kiểu thực tế của đối tượng
-        if (dynamic_cast<HourlyEmployee*>(dsNhanVien[i])) {
-            countHourly++;
-        } else if (dynamic_cast<MonthlyEmployee*>(dsNhanVien[i])) {
-            countMonthly++;
+    // Thống kê phân loại số lượng nhân viên
+    int hourlyCount = 0;
+    int monthlyCount = 0;
+    for (size_t i = 0; i < staffList.size(); ++i) {
+        if (dynamic_cast<HourlyEmployee*>(staffList[i])) {
+            hourlyCount++;
+        } else if (dynamic_cast<MonthlyEmployee*>(staffList[i])) {
+            monthlyCount++;
         }
     }
     cout << "=== THONG KE SO LUONG ===" << endl;
-    cout << "So luong HourlyEmployee : " << countHourly << endl;
-    cout << "So luong MonthlyEmployee: " << countMonthly << endl << endl;
+    cout << "So luong HourlyEmployee : " << hourlyCount << endl;
+    cout << "So luong MonthlyEmployee: " << monthlyCount << endl << endl;
 
-    // 7. Tìm và hiển thị danh sách nhân viên có lương lớn hơn giá trị nhập từ người dùng (Yêu cầu 7)[cite: 5]
-    double mucLuongSoSanh;
+    // Lọc danh sách nhân viên vượt mức lương chỉ định
+    double thresholdSalary;
     cout << "Nhap muc luong de tim kiem (greater than): ";
-    cin >> mucLuongSoSanh;
-    cout << "=== DANH SACH NHAN VIEN LUONG > " << mucLuongSoSanh << " ===" << endl;
-    bool found = false;
-    for (size_t i = 0; i < dsNhanVien.size(); ++i) {
-        if (dsNhanVien[i]->tinhLuong() > mucLuongSoSanh) {
-            dsNhanVien[i]->displayInfo();
+    cin >> thresholdSalary;
+    cout << "=== DANH SACH NHAN VIEN LUONG > " << thresholdSalary << " ===" << endl;
+    bool matchFound = false;
+    for (size_t i = 0; i < staffList.size(); ++i) {
+        if (staffList[i]->tinhLuong() > thresholdSalary) {
+            staffList[i]->displayInfo();
             cout << "--------------------------" << endl;
-            found = true;
+            matchFound = true;
         }
     }
-    if (!found) {
+    if (!matchFound) {
         cout << "Khong tìm thay nhân vien nao thoa man.\n" << endl;
     }
 
-    // 8. Sắp xếp danh sách nhân viên theo lương giảm dần (Yêu cầu 8)[cite: 5]
-    sort(dsNhanVien.begin(), dsNhanVien.end(), [](Employee* a, Employee* b) {
-        return a->tinhLuong() > b->tinhLuong();
+    // Sắp xếp thứ tự danh sách theo chiều lương giảm dần
+    sort(staffList.begin(), staffList.end(), [](Employee* empA, Employee* empB) {
+        return empA->tinhLuong() > empB->tinhLuong();
     });
 
     cout << "=== DANH SACH SAU KHI SAP XEP LUONG GIAM DAN ===" << endl;
-    for (size_t i = 0; i < dsNhanVien.size(); ++i) {
-        cout << "CCCD: " << dsNhanVien[i]->getCCCD() << " | Luong: " << dsNhanVien[i]->tinhLuong() << endl;
+    for (size_t i = 0; i < staffList.size(); ++i) {
+        cout << "CCCD: " << staffList[i]->getCCCD() << " | Luong: " << staffList[i]->tinhLuong() << endl;
     }
 
-    // Giải phóng bộ nhớ động đã cấp phát cho vector
-    for (size_t i = 0; i < dsNhanVien.size(); ++i) {
-        delete dsNhanVien[i];
+    // Thu hồi vùng nhớ động đã cấp phát tránh rò rỉ bộ nhớ (Memory Leak)
+    for (size_t i = 0; i < staffList.size(); ++i) {
+        delete staffList[i];
     }
-    dsNhanVien.clear();
+    staffList.clear();
 
     return 0;
 }
