@@ -8,9 +8,9 @@ using namespace std;
 // 1. Lớp cơ sở Employee (Quản lý thông tin định danh nhân sự)
 class Employee {
 protected:
-    string identificationCard; // Thay tên biến: cccd -> identificationCard
-    string phoneNum;           // Thay tên biến: sdt -> phoneNum
-    string residence;          // Thay tên biến: address -> residence
+    string identificationCard; 
+    string phoneNum;           
+    string residence;          
 public:
     Employee() {
         identificationCard = "";
@@ -47,8 +47,8 @@ public:
 // 2. Lớp HourlyEmployee (Nhân viên tính lương theo giờ làm việc)
 class HourlyEmployee : public Employee {
 private:
-    int workHours;     // Thay tên biến: soGioLamViec -> workHours
-    double hourlyRate; // Thay tên biến: donGia -> hourlyRate
+    int workHours;     
+    double hourlyRate; 
 public:
     HourlyEmployee() : Employee() {
         workHours = 0;
@@ -83,9 +83,9 @@ public:
 // 3. Lớp MonthlyEmployee (Nhân viên biên chế hưởng lương tháng cố định)
 class MonthlyEmployee : public Employee {
 private:
-    double baseSalary;  // Thay tên biến: luongCoBan -> baseSalary
-    double allowance;   // Thay tên biến: phuCap -> allowance
-    double bonusFactor; // Thay tên biến: heSoThuong -> bonusFactor
+    double baseSalary; 
+    double allowance;   
+    double bonusFactor; 
 public:
     MonthlyEmployee() : Employee() {
         baseSalary = 0.0;
