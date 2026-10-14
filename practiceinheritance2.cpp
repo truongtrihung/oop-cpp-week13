@@ -5,7 +5,7 @@ using namespace std;
 
 // 1. Class Employee (lớp cha)
 class Employee {
-private:
+protected:
     string cccd;
     string sdt;
     string address;
@@ -15,10 +15,16 @@ public:
         sdt = "";
         address = "";
     }
-    Employee(string c, string p, string a) {
+    Employee(string c, string s, string a) {
         cccd = c;
-        sdt = p;
+        sdt = s;
         address = a;
+    }
+
+    virtual void displayInfo() const {
+        cout << "CCCD: " << cccd << endl;
+        cout << "SDT: " << sdt << endl;
+        cout << "Address: " << address << endl;
     }
 
     // getters
@@ -28,7 +34,7 @@ public:
 
     // setters
     void setCCCD(string c) { cccd = c; }
-    void setSDT(string p) { sdt = p; }
+    void setSDT(string s) { sdt = s; }
     void setAddress(string a) { address = a; }
 };
 
@@ -42,17 +48,25 @@ public:
         soGioLamViec = 0;
         donGia = 0.0;
     }
-    HourlyEmployee(string c, string p, string a, int soGio, double dg) 
-        : Employee(c, p, a) {
+    HourlyEmployee(string c, string s, string a, int soGio, double dg) : Employee(c, s, a) {
         soGioLamViec = soGio;
         donGia = dg;
     }
 
-    // getters
+    double tinhLuong() const {
+        return soGioLamViec * donGia;
+    }
+
+    void displayInfo() const override {
+        Employee::displayInfo();
+        cout << "So gio lam viec: " << soGioLamViec << endl;
+        cout << "Don gia: " << donGia << endl;
+        cout << "Luong: " << tinhLuong() << endl;
+    }
+
+    // getters & setters
     int getSoGioLamViec() const { return soGioLamViec; }
     double getDonGia() const { return donGia; }
-
-    // setters
     void setSoGioLamViec(int g) { soGioLamViec = g; }
     void setDonGia(double dg) { donGia = dg; }
 };
@@ -69,19 +83,28 @@ public:
         phuCap = 0.0;
         heSoThuong = 0.0;
     }
-    MonthlyEmployee(string c, string p, string a, double lcb, double pc, double hs) 
-        : Employee(c, p, a) {
+    MonthlyEmployee(string c, string s, string a, double lcb, double pc, double hs) : Employee(c, s, a) {
         luongCoBan = lcb;
         phuCap = pc;
         heSoThuong = hs;
     }
 
-    // getters
+    double tinhLuong() const {
+        return luongCoBan + phuCap + (luongCoBan * heSoThuong);
+    }
+
+    void displayInfo() const override {
+        Employee::displayInfo();
+        cout << "Luong co ban: " << luongCoBan << endl;
+        cout << "Phu cap: " << phuCap << endl;
+        cout << "He so thuong: " << heSoThuong << endl;
+        cout << "Luong: " << tinhLuong() << endl;
+    }
+
+    // getters & setters
     double getLuongCoBan() const { return luongCoBan; }
     double getPhuCap() const { return phuCap; }
     double getHeSoThuong() const { return heSoThuong; }
-
-    // setters
     void setLuongCoBan(double lcb) { luongCoBan = lcb; }
     void setPhuCap(double pc) { phuCap = pc; }
     void setHeSoThuong(double hs) { heSoThuong = hs; }
@@ -89,35 +112,18 @@ public:
 
 // 4. Hàm main()
 int main() {
-    // Tạo đối tượng Employee (mặc định)
-    Employee e1;
+    Employee e1("07987654321", "", "Ho Chi Minh");
+    HourlyEmployee h1("07987654321", "", "Ha Noi", 160, 50000);
+    MonthlyEmployee m1("079987654321", "", "Da Nang", 15000000, 2000000, 1.2);
 
-    // Tạo đối tượng HourlyEmployee (có tham số)
-    HourlyEmployee h1("079123456789", "0901002003", "Ha Noi", 160, 50000);
+    cout << "--- Thong tin Employee ---" << endl;
+    e1.displayInfo();
 
-    // Tạo đối tượng MonthlyEmployee (có tham số)[cite: 3]
-    MonthlyEmployee m1("079987654321", "0903004005", "Da Nang", 15000000, 2000000, 1.2);
+    cout << "\n--- Thong tin HourlyEmployee ---" << endl;
+    h1.displayInfo();
 
-    // Hiển thị thông tin (ví dụ)
-    cout << "--- Employee e1 ---" << endl;
-    cout << "CCCD: " << e1.getCCCD() << endl;
-    cout << "SDT: " << e1.getSDT() << endl;
-    cout << "Address: " << e1.getAddress() << endl << endl;
-
-    cout << "--- HourlyEmployee h1 ---" << endl;
-    cout << "CCCD: " << h1.getCCCD() << endl;
-    cout << "SDT: " << h1.getSDT() << endl;
-    cout << "Address: " << h1.getAddress() << endl;
-    cout << "So gio lam viec: " << h1.getSoGioLamViec() << endl;
-    cout << "Don gia: " << h1.getDonGia() << endl << endl;
-
-    cout << "--- MonthlyEmployee m1 ---" << endl;
-    cout << "CCCD: " << m1.getCCCD() << endl;
-    cout << "SDT: " << m1.getSDT() << endl;
-    cout << "Address: " << m1.getAddress() << endl;
-    cout << "Luong co ban: " << m1.getLuongCoBan() << endl;
-    cout << "Phu cap: " << m1.getPhuCap() << endl;
-    cout << "He so thuong: " << m1.getHeSoThuong() << endl;
+    cout << "\n--- Thong tin MonthlyEmployee ---" << endl;
+    m1.displayInfo();
 
     return 0;
 }
